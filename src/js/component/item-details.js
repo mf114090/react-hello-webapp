@@ -22,7 +22,7 @@ export const ItemDetails = props => {
 
 	return (
 		<div className="container">
-			<div className="d-flex flex-row text-center">
+			<div className="d-flex flex-row text-center text-danger">
 				<img src={starWars800x600} className="col-6" alt="star wars image" />
 				<div className="col-6">
 					<h1>{title}</h1>

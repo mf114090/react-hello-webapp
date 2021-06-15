@@ -10,7 +10,6 @@ export const Navbar = () => {
 					<span className="navbar-brand mb-0 h1">Starwars Database</span>
 				</Link>
 				<div className="ml-auto">
-					Favorites
 					<Favorites />
 				</div>
 			</div>
