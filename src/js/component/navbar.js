@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { Favorites } from "./favorites";
+import { Favorites } from "./favorites";
 
 export const Navbar = () => {
 	return (
@@ -11,7 +11,7 @@ export const Navbar = () => {
 				</Link>
 				<div className="ml-auto">
 					Favorites
-					{/* <Favorites />  */}
+					<Favorites />
 				</div>
 			</div>
 		</nav>

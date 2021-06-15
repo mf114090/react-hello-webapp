@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-// import { Favorite } from "./favorite";
+import { Favorite } from "./favorite";
 
 export const Favorites = () => {
 	const [label, setLabel] = useState("far fa-heart");

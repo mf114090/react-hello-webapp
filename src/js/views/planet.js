@@ -1,40 +1,73 @@
 import React, { useState, useEffect, useContext } from "react";
-import { HorizontalScrollList } from "./horizontal-scroll-list";
+import { useParams } from "react-router-dom";
+import starWars800x600 from "../../img/star-wars-800x600.jpg";
 import { Context } from "../store/appContext";
+import { ItemDetails } from "../component/item-details";
+import { ifArrayExistsAndHasData } from "../common/common.js";
 
-export const Planets = () => {
+export const Planet = () => {
+	const [planet, setPlanet] = useState({});
 	const { store, actions } = useContext(Context);
-	const [planets, setPlanets] = useState([]);
+	let { name } = useParams();
 
 	useEffect(() => {
-		planetsProcess();
+		name = decodeURIComponent(name);
+		checkIfWeHaveData();
+		getPlanetByName(name);
 	}, []);
 
-	async function planetsProcess() {
-		await getPlanets();
-		localStorage.setItem("planets", JSON.stringify(store.planetsResponseJSON));
-		const planetsMap = mapPlanets();
-		setPlanets(planetsMap);
-	}
-
-	async function getPlanets() {
-		await actions.fetchGetPlanets();
-	}
-
-	function mapPlanets() {
-		let jsonMap = [];
-		if (store.planetsResponseJSON.results) {
-			jsonMap = store.planetsResponseJSON.results.map(function(planet, index) {
-				let details = ["Population: " + planet.population, "Terrain: " + planet.terrain];
-
-				return {
-					name: planet.name,
-					details: details
-				};
-			});
+	function checkIfWeHaveData() {
+		if (ifArrayExistsAndHasData(store.planetsResponseJSON)) {
+			let storedPlanets = JSON.parse(localStorage.getItem("planets"));
+			actions.setPlanets(storedPlanets);
 		}
-		return jsonMap;
 	}
 
-	return <HorizontalScrollList listName={"Planets"} items={planets} link={"planet"} />;
+	function getPlanetByName(name) {
+		let planet = actions.getPlanetByName(name);
+		if (planet) {
+			setPlanet(planet);
+		} else {
+			alert("Planet not found");
+			throw Error("Planet not found");
+		}
+	}
+	function parseDetailsToItemDetails(object) {
+		return [
+			{
+				label: "Population",
+				value: object.population
+			},
+			{
+				label: "Terrain",
+				value: object.terrain
+			},
+			{
+				label: "Climate",
+				value: object.climate
+			},
+			{
+				label: "Diameter",
+				value: object.diameter
+			},
+			{
+				label: "Gravity",
+				value: object.gravity
+			},
+			{
+				label: "Rotation Period",
+				value: object.rotation_period
+			}
+		];
+	}
+
+	const itemDetails = parseDetailsToItemDetails(planet);
+	const description =
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eu mollis erat." +
+		" Duis sed justo orci. Mauris a lacus vel erat congue aliquam. " +
+		" Fusce sit amet pellentesque enim, nec interdum diam. Phasellus consequat dolor magna." +
+		" Nam malesuada felis ac lectus volutpat varius. Suspendisse quis quam semper," +
+		" hendrerit mauris nec, eleifend.";
+
+	return <ItemDetails title={planet.name} description={description} details={itemDetails} />;
 };
